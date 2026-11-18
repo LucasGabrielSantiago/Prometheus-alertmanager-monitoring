@@ -1,0 +1,14 @@
+groups:
+  - name: windows-cpu-alerts
+    rules:
+      - alert: HighCPUUsage
+        expr: |
+          100 * (1 - avg by (instance) (
+            rate(windows_cpu_time_seconds_total{mode="idle"}[5m])
+          )) > 80
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Utilizacao elevada da CPU"
+          description: "A CPU do Windows esta acima de 80% por mais de 1 minuto."
